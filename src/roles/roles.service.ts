@@ -6,6 +6,11 @@ export class RolesService {
   constructor(private readonly prismaService: PrismaService) {}
 
   getRoles() {
-    return this.prismaService.role.findMany();
+    return this.prismaService.role.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
   }
 }
