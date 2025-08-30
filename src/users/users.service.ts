@@ -37,4 +37,19 @@ export class UsersService {
       totalItems,
     };
   }
+
+  async updateUserRoles(userId: number, roles: number[]) {
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        roles: {
+          deleteMany: {},
+          create: roles.map((id) => ({ roleId: id })),
+        },
+      },
+      include: {
+        roles: { include: { role: true } },
+      },
+    });
+  }
 }
