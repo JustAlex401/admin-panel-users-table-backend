@@ -5,6 +5,11 @@ import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, UsersModule, RolesModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    UsersModule,
+    RolesModule,
+  ],
 })
 export class AppModule {}
