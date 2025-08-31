@@ -9,11 +9,27 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getUsers(page: number, limit: number): Promise<UsersResultDto> {
+  async getUsers(
+    page: number,
+    limit: number,
+    rolesFilter?: number[],
+  ): Promise<UsersResultDto> {
+    const filterWhere =
+      rolesFilter && rolesFilter.length > 0
+        ? {
+            roles: {
+              some: {
+                roleId: { in: rolesFilter },
+              },
+            },
+          }
+        : {};
+
     const [users, totalItems] = await this.prismaService.$transaction([
       this.prismaService.user.findMany({
         skip: (page - 1) * limit,
         take: limit,
+        where: filterWhere,
         include: {
           roles: {
             include: {
@@ -27,7 +43,9 @@ export class UsersService {
           },
         },
       }),
-      this.prismaService.user.count(),
+      this.prismaService.user.count({
+        where: filterWhere,
+      }),
     ]);
 
     return {
