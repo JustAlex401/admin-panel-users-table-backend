@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsArray,
-  IsInt,
-  Min,
-} from 'class-validator';
+import { IsString, IsOptional, IsArray, IsInt, Min } from 'class-validator';
 
 export class FilterDto {
   @IsOptional()
